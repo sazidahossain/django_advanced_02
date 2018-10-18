@@ -9,5 +9,22 @@ def store_list(request):
     }
     return render(request, 'store_list.html', context)
 
+def store_detail(request, store_slug):
+    store_obj = Store.objects.get(slug=store_slug)
+    context = {
+        "store": store_obj,
+        "store_slug":store_slug
+    }
+    return render (request, 'store_detail.html', context)
 
-
+def store_create(request):
+    form = StoreModelForm()
+    if request.method == "POST":
+        form = StoreModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('list')
+    context = {
+        "form":form,
+    }
+    return render(request, 'create.html', context)  
